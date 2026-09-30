@@ -88,6 +88,7 @@ const Game = {
     );
     this.progress = Object.assign({ unlocked: 1, stars: {} }, Store.get('progress', {}));
     window.addEventListener('resize', () => this.resize());
+    if (window.ResizeObserver) new ResizeObserver(() => this.resize()).observe(this.canvas);
     this.resize();
     this.bindInput();
     requestAnimationFrame((t) => this.loop(t));
@@ -98,7 +99,8 @@ const Game = {
 
   resize() {
     const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
-    const cw = window.innerWidth, ch = window.innerHeight;
+    // size from the canvas box (it fills its container), falling back to the window
+    const cw = this.canvas.clientWidth || window.innerWidth, ch = this.canvas.clientHeight || window.innerHeight;
     this.dpr = dpr;
     this.canvas.width = Math.round(cw * dpr);
     this.canvas.height = Math.round(ch * dpr);
@@ -262,8 +264,10 @@ const Game = {
   toggleFullscreen() {
     const el = document.documentElement;
     try {
-      if (!document.fullscreenElement) (el.requestFullscreen || el.webkitRequestFullscreen).call(el);
-      else (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+      const p = !document.fullscreenElement
+        ? (el.requestFullscreen || el.webkitRequestFullscreen).call(el)
+        : (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+      if (p && p.catch) p.catch(() => {});
     } catch (e) { /* not supported */ }
   },
 };

@@ -1,0 +1,41 @@
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #0b0706;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+canvas {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+noscript {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #f3e3c0;
+  font: 20px Georgia, serif;
+}
+#rotate-hint {
+  display: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 16px;
+  text-align: center;
+  color: #f3e3c0;
+  font: 600 15px Georgia, serif;
+  opacity: 0.85;
+  pointer-events: none;
+}
+@media (orientation: portrait) and (pointer: coarse) {
+  #rotate-hint { display: block; }
+}
